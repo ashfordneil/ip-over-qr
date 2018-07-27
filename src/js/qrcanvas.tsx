@@ -16,6 +16,10 @@ export class QRCanvas extends React.Component<QRCanvasProps> {
         //TODO: Component update
     }
 
+    componentDidUpdate() {
+        this.generate();
+    }
+
     generate() {
         var canv = document.getElementById(this.props.id);
         QrCode.toCanvas(canv, this.props.input, (err: any) => { if (err) { console.log("error") } else { console.log("succ") } });
