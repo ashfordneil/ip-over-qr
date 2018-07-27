@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "instascan": "^1.0.0",
+    "qrcode": "^1.2.0",
     "react": "^16.0.0",
     "react-dom": "^16.4.1"
   }
