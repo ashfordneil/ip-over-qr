@@ -1,35 +1,28 @@
 import * as React from 'react';
 import * as QrCode from 'qrcode';
 
-interface QRCanvasProps {
+type QRCanvasProps = {
     id: string;
     input: {},
-}
+} & React.DetailedHTMLProps<React.CanvasHTMLAttributes<HTMLCanvasElement>, HTMLCanvasElement>
 
-
-
-interface QRCanvasState {
-}
-
-export class QRCanvas extends React.Component<QRCanvasProps, QRCanvasState> {
+export class QRCanvas extends React.Component<QRCanvasProps> {
     constructor(props: QRCanvasProps) {
         super(props);
-        this.state = {
-        }
     }
 
     componentDidMount() {
         this.generate();
+        //TODO: Component update
     }
 
     generate() {
         var canv = document.getElementById(this.props.id);
         QrCode.toCanvas(canv, this.props.input, (err: any) => { if (err) { console.log("error") } else { console.log("succ") } });
-
     }
 
     render() {
         const {input, ...props} = this.props;
-        return (<canvas {...props}> </canvas>)
+        return <canvas {...props}> </canvas>
     }
 }
