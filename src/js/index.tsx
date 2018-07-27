@@ -5,6 +5,7 @@ import { QrScanner } from './scanner';
 import { QrGenerator } from './generator';
 import FileUploader from './fileuploader';
 import { QRCanvas } from './qrcanvas';
+import { FileQRGenerator } from './fileqrgenerator';
 
 
 
@@ -15,7 +16,8 @@ const App = () => {
         <h1>Hello, world!!!</h1>
         {scanner}
         {generator}
-        <FileUploader onUpload={(thing, stuff) => {
+        <FileQRGenerator />
+        {/* <FileUploader onUpload={(thing, stuff) => {
             console.log("got thing");
             console.log(thing);
             console.log(stuff);
@@ -23,7 +25,7 @@ const App = () => {
         />
         <QRCanvas id="thingo" input="hello there" />
         <QRCanvas id="sutfff" input="hiya" />
-        <QRCanvas id="stuff" input="the quick brown fox jumped over the lazy dog" />
+        <QRCanvas id="stuff" input="the quick brown fox jumped over the lazy dog" /> */}
     </div>;
 }
 
