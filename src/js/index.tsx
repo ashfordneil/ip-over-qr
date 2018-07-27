@@ -3,6 +3,7 @@ import * as ReactDOM from 'react-dom';
 
 import { QrScanner } from './scanner';
 import { QrGenerator } from './generator';
+import FileUploader from './fileuploader';
 
 const App = () => {
     const scanner = <QrScanner display={true} />;
@@ -11,6 +12,12 @@ const App = () => {
         <h1>Hello, world!!!</h1>
         {scanner}
         {generator}
+        <FileUploader onUpload={(thing, stuff) => {
+            console.log("got thing");
+            console.log(thing);
+            console.log(stuff);
+        }}
+        />
     </div>;
 }
 
