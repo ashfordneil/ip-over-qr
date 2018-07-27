@@ -4,6 +4,9 @@ import * as ReactDOM from 'react-dom';
 import { QrScanner } from './scanner';
 import { QrGenerator } from './generator';
 import FileUploader from './fileuploader';
+import { QRCanvas } from './qrcanvas';
+
+
 
 const App = () => {
     const scanner = <QrScanner display={true} />;
@@ -18,6 +21,9 @@ const App = () => {
             console.log(stuff);
         }}
         />
+        <QRCanvas id="thingo" input="hello there" />
+        <QRCanvas id="sutfff" input="hiya" />
+        <QRCanvas id="stuff" input="the quick brown fox jumped over the lazy dog" />
     </div>;
 }
 
