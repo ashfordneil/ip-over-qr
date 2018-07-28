@@ -1,7 +1,7 @@
-const getChecksum = (input: { length?: number }) => {
-    return input.length
-        ? input.length.toString()
-        : 'no length';
+import { Scanned } from "instascan";
+
+const getChecksum = (input: Scanned) => {
+    return input.length.toString();
 }
 
 export default getChecksum;

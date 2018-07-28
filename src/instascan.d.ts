@@ -6,8 +6,10 @@ declare module 'instascan' {
         static getCameras(): CameraThing[]
     }
 
+    export type Scanned = string;
+
     export interface ScanData {
-        content: {}
+        content: Scanned
     }
 
     export class Scanner {

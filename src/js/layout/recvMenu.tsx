@@ -26,11 +26,16 @@ export class RecvMenu extends React.Component<Props, State> {
 
     render() {
         return <div className="jumbotron" style={{ flex: 1 }}>
-            <button
-                className="btn btn-primary"
-                onClick={() => this.startReceiving()}
-                style={{ width: "100%" }}
-            >Go</button>
+            {
+                this.state.receiving
+                    ? null
+                    :
+                    <button
+                        className="btn btn-primary"
+                        onClick={() => this.startReceiving()}
+                        style={{ width: "100%" }}
+                    >Go</button>
+            }
             {
                 this.state.receiving
                     ? <Receiver />

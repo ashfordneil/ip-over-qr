@@ -2,12 +2,13 @@ import * as React from 'react';
 import { QrScanner } from './scanner';
 import { QRCanvas } from './qrcanvas';
 import getChecksum from './getChecksum';
+import { Scanned } from 'instascan';
 
 interface ReceiverProps {
 }
 
 interface ReceiverState {
-    scanHist: {}[],
+    scanHist: Scanned[],
     checksum: string | null;
 }
 
@@ -20,12 +21,13 @@ export class Receiver extends React.Component<ReceiverProps, ReceiverState> {
         };
     }
 
-    logScanned(scanned: {}) {
-        this.setState(({ scanHist }) => {
+    logScanned(scanned: Scanned) {
+        const { scanHist, checksum } = this.state;
+        const newChecksum = getChecksum(scanned);
+        if (checksum != newChecksum) {
             scanHist.push(scanned);
-            const checksum = getChecksum(scanned);
-            return ({ scanHist, checksum })
-        });
+            this.setState({ scanHist, checksum: newChecksum });
+        }
     }
 
     render() {
@@ -37,8 +39,8 @@ export class Receiver extends React.Component<ReceiverProps, ReceiverState> {
             }
             <QrScanner
                 autoscan
-                display
-                showAutoToggle
+                // display
+                // showAutoToggle
                 onScan={(scanned) => {
                     if (scanned != null) {
                         console.log("scanned!");
