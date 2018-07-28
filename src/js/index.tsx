@@ -30,7 +30,6 @@ class App extends React.Component<{}, State> {
         const generator = <QrGenerator display={true} />;
 
         const main = { scanner, generator, 'null': null }[this.state.showing];
-        console.log(main, scanner);
 
         return <div>
             {headings}
