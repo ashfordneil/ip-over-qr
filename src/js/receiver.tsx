@@ -133,7 +133,7 @@ export class Receiver extends React.Component<ReceiverProps, ReceiverState> {
                                 <>
                                     <div className="progress">
                                         <div
-                                            className="progress-bar"
+                                            className="progress-bar progress-bar-striped progress-bar-animated"
                                             role="progressbar"
                                             style={{
                                                 "width": (
