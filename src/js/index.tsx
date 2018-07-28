@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
+import { DuringSend } from './layout/duringSend';
 import { StartupMenu } from './layout/startupMenu';
 
 // import { QrScanner } from './scanner';
@@ -41,7 +42,8 @@ import { StartupMenu } from './layout/startupMenu';
 // }
 
 const App = () => {
-    return <StartupMenu send={() => console.log('send')} recv={() => console.log('recv')} />
+    // return <StartupMenu send={() => console.log('send')} recv={() => console.log('recv')} />
+    return <DuringSend data="hello" mime="tex/application" />
 }
 
 
