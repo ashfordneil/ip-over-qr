@@ -6,6 +6,7 @@ interface Props {
     showButton?: boolean;
     autoscan?: boolean;
     scanInterval?: number;
+    showAutoToggle?: boolean;
     onScan: (received: {}) => void;
 }
 
@@ -14,7 +15,7 @@ interface State {
     failed: boolean;
     camera: any | null;
     scanner: any | null;
-    interval?: NodeJS.Timer;
+    interval: NodeJS.Timer | null;
 }
 
 export class QrScanner extends React.Component<Props, State> {
@@ -25,6 +26,7 @@ export class QrScanner extends React.Component<Props, State> {
             failed: false,
             camera: null,
             scanner: null,
+            interval: null,
         };
     }
 
@@ -42,12 +44,7 @@ export class QrScanner extends React.Component<Props, State> {
                 await scanner.start(camera);
                 this.setState({ loading: false });
                 if (this.props.autoscan) {
-                    var interval = setInterval(
-                        () => {
-                            this.scan();
-                        }
-                        , this.props.scanInterval || 1000);
-                    this.setState({ interval });
+                    this.startAutoscan();
                 }
 
             }
@@ -57,10 +54,24 @@ export class QrScanner extends React.Component<Props, State> {
     }
 
     componentWillUnmount() {
+        this.stopAutoscan();
+    }
+
+    startAutoscan() {
+        var interval = setInterval(
+            () => {
+                this.scan();
+            }
+            , this.props.scanInterval || 1000);
+        this.setState({ interval });
+    }
+
+    stopAutoscan() {
         const { interval } = this.state;
         if (interval) {
             clearInterval(interval);
         }
+        this.setState({ interval: null })
     }
 
     async scan() {
@@ -93,6 +104,21 @@ export class QrScanner extends React.Component<Props, State> {
                 (!(this.props.showButton) || (loading !== null))
                     ? null
                     : <button onClick={() => this.scan()}>Scan</button>
+            }
+            {
+                this.props.showAutoToggle
+                    ? <button onClick={() =>
+                        this.state.interval
+                            ? this.stopAutoscan()
+                            : this.startAutoscan()
+                    }>
+                        {
+                            this.state.interval
+                                ? 'Stop autoscanning'
+                                : 'Start autoscanning'
+                        }
+                    </button>
+                    : null
             }
         </div>;
     }

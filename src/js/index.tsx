@@ -30,6 +30,7 @@ class App extends React.Component<{}, State> {
             display={true}
             autoscan
             showButton
+            showAutoToggle
             onScan={scanned => {
                 console.log("did the scan!");
                 console.log(scanned);
