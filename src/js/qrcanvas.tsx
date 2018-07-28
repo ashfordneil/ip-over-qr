@@ -1,13 +1,13 @@
 import * as React from 'react';
 import * as QrCode from 'qrcode';
 
-type QRCanvasProps = {
+type Props = {
     id: string;
     input: string,
-} & React.DetailedHTMLProps<React.CanvasHTMLAttributes<HTMLCanvasElement>, HTMLCanvasElement>
+}
 
-export class QRCanvas extends React.Component<QRCanvasProps> {
-    constructor(props: QRCanvasProps) {
+export class QRCanvas extends React.Component<Props> {
+    constructor(props: Props) {
         super(props);
     }
 
@@ -30,15 +30,15 @@ export class QRCanvas extends React.Component<QRCanvasProps> {
                 if (context) {
                     context.clearRect(0, 0, canv.width, canv.height);
                 }
-            } else {
-                console.log("Success!");
             }
         }
         );
     }
 
     render() {
-        const { input, ...props } = this.props;
-        return <canvas {...props}> </canvas>
+        const { input, id } = this.props;
+        return <div style={{ width: "100%", height: "100%" }}>
+            <canvas id={id} style={{ minWidth: "80%", minHeight: "80%" }} />
+        </div>;
     }
 }

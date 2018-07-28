@@ -7,7 +7,7 @@ interface Props {
     autoscan?: boolean;
     scanInterval?: number;
     showAutoToggle?: boolean;
-    onScan: (received: ScanData | null) => void;
+    onScan: (received: ScanData) => void;
 }
 
 interface State {
@@ -84,7 +84,9 @@ export class QrScanner extends React.Component<Props, State> {
 
         if (this.state.scanner) {
             const output = await this.state.scanner.scan();
-            this.props.onScan(output);
+            if (output !== null) {
+                this.props.onScan(output);
+            }
             return output;
         }
         else {
