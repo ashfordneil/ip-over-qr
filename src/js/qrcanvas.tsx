@@ -13,7 +13,6 @@ export class QRCanvas extends React.Component<QRCanvasProps> {
 
     componentDidMount() {
         this.generate();
-        //TODO: Component update
     }
 
     componentDidUpdate() {
@@ -21,12 +20,25 @@ export class QRCanvas extends React.Component<QRCanvasProps> {
     }
 
     generate() {
-        var canv = document.getElementById(this.props.id);
-        QrCode.toCanvas(canv, this.props.input, (err: any) => { if (err) { console.log("error") } else { console.log("succ") } });
+        const { id, input } = this.props;
+        var canv = document.getElementById(id) as HTMLCanvasElement;
+        QrCode.toCanvas(canv, input, (err: any) => {
+            if (err) {
+                console.warn("Error creating QR");
+                console.warn(err);
+                const context = canv.getContext('2d');
+                if (context) {
+                    context.clearRect(0, 0, canv.width, canv.height);
+                }
+            } else {
+                console.log("Success!");
+            }
+        }
+        );
     }
 
     render() {
-        const {input, ...props} = this.props;
+        const { input, ...props } = this.props;
         return <canvas {...props}> </canvas>
     }
 }
