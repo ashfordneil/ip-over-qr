@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import { DuringSend } from './duringSend';
-import { SendMenu } from './sendMenu';
+import { SendUploader } from './sendUploader';
+import { Sender } from '../sender';
 
 interface SendThingState {
     step: 'upload' | 'sending';
@@ -21,7 +21,7 @@ export class SendTab extends React.Component<{}, SendThingState> {
 
     render() {
         if (this.state.step === 'upload') {
-            return <SendMenu
+            return <SendUploader
                 onComplete={(data, mime) => {
                     console.log(data);
                     this.setState({ data, mime, step: 'sending' })
@@ -38,7 +38,30 @@ export class SendTab extends React.Component<{}, SendThingState> {
                         })
                     }}> Back
             </button>
-                <DuringSend data={this.state.data} mime={this.state.mime} />
+                <div
+                    style={{
+                        width: "100%",
+                        display: "flex",
+                        flexFlow: "column",
+                    }}
+                >
+                    <div className="nav nav-pills nav-fill">
+                        <div className="nav-item nav-link active">Sending</div>
+                    </div>
+                    <div
+                        className="jumbotron"
+                        style={{
+                            flex: 1,
+                            display: "flex",
+                            flexFlow: "column",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            width: "100%",
+                        }}
+                    >
+                        <Sender mime={this.state.mime} data={this.state.data} />
+                    </div>
+                </div>
             </div>
         }
     }
