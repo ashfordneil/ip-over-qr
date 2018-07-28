@@ -1,41 +1,47 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
-import { QrScanner } from './scanner';
-import { QrGenerator } from './generator';
-import FileUploader from './fileuploader';
-import { QRCanvas } from './qrcanvas';
-import { FileQRGenerator } from './fileqrgenerator';
-import '../style.css'
+import { StartupMenu } from './layout/startupMenu';
 
-interface State {
-    showing: 'null' | 'scanner' | 'generator';
-}
+// import { QrScanner } from './scanner';
+// import { QrGenerator } from './generator';
+// import FileUploader from './fileuploader';
+// import { QRCanvas } from './qrcanvas';
+// import { FileQRGenerator } from './fileqrgenerator';
+// import '../style.css'
 
-class App extends React.Component<{}, State> {
-    constructor(props: {}) {
-        super(props);
-        this.state = {
-            showing: 'null',
-        }
-    }
+// interface State {
+//     showing: 'null' | 'scanner' | 'generator';
+// }
 
-    render() {
-        const headings = <div>
-            <button onClick={() => this.setState({showing: 'scanner'})}>Scanner</button>
-            <button onClick={() => this.setState({showing: 'generator'})}>Generator</button>
-        </div>;
+// class App extends React.Component<{}, State> {
+//     constructor(props: {}) {
+//         super(props);
+//         this.state = {
+//             showing: 'null',
+//         }
+//     }
 
-        const scanner = <QrScanner display={true} />;
-        const generator = <QrGenerator display={true} />;
+//     render() {
+//         const headings = <div>
+//             <button onClick={() => this.setState({showing: 'scanner'})}>Scanner</button>
+//             <button onClick={() => this.setState({showing: 'generator'})}>Generator</button>
+//         </div>;
 
-        const main = { scanner, generator, 'null': null }[this.state.showing];
+//         const scanner = <QrScanner display={true} />;
+//         const generator = <QrGenerator display={true} />;
 
-        return <div>
-            {headings}
-            {main}
-        </div>
-    }
+//         const main = { scanner, generator, 'null': null }[this.state.showing];
+
+//         return <div>
+//             {headings}
+//             {main}
+//         </div>
+//     }
+// }
+
+const App = () => {
+    return <StartupMenu send={() => console.log('send')} recv={() => console.log('recv')} />
 }
 
 
