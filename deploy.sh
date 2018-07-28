@@ -9,10 +9,10 @@ git checkout master
 # clean up previous deployments
 git branch -D gh-pages
 git checkout -b gh-pages
-rm -rf ./dist
+# rm -rf ./dist
 
 # perform the build
-yarn build
+# yarn build
 
 # remove the things we don't want to host
 tar -c CNAME -C dist . > dist.tar
@@ -25,4 +25,4 @@ rm dist.tar
 # and deploy
 git add .
 git commit -m "deploy"
-git push --force
+git push -u origin gh-pages --force
