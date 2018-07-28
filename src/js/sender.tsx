@@ -12,6 +12,7 @@ interface Props {
 
 interface State {
     current: null | number;
+    finished: boolean;
 }
 
 export class Sender extends React.Component<Props, State> {
@@ -19,12 +20,16 @@ export class Sender extends React.Component<Props, State> {
         super(props);
         this.state = {
             current: null,
+            finished: false,
         };
     }
 
     render() {
-        const { current } = this.state;
+        const { current, finished } = this.state;
         const { mime, data } = this.props;
+        if (finished) {
+            return <div>Done!</div>;
+        }
 
         const length = Math.ceil(data.length / QR_CODE_LENGTH);
         const payload = (current === null)
@@ -38,6 +43,7 @@ export class Sender extends React.Component<Props, State> {
             onScan={content => {
                 if (content === STOP_CODE) {
                     console.log("finished");
+                    this.setState({finished: true});
                 } else {
                     try {
                         const num = parseInt(content);
