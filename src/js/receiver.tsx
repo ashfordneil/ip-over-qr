@@ -65,8 +65,8 @@ export class Receiver extends React.Component<ReceiverProps, ReceiverState> {
         console.log("logging...");
         console.log(scanned);
         const index = scanned.indexOf('|');
-        
-        if (index >= 0 ) {
+
+        if (index >= 0) {
             const content = scanned.slice(index + 1);
             const frame = parseInt(scanned.slice(0, index));
             if (isNaN(frame)) {
@@ -90,7 +90,7 @@ export class Receiver extends React.Component<ReceiverProps, ReceiverState> {
                     console.log("done!");
                     console.log(this.state.frames);
                     let doneStr = '';
-                    for (let i = 0; i < (this.state.numFrames as number); i++){
+                    for (let i = 0; i < (this.state.numFrames as number); i++) {
                         doneStr += this.state.frames[i];
                     }
                     if (this.props.onFinish) {
@@ -99,7 +99,7 @@ export class Receiver extends React.Component<ReceiverProps, ReceiverState> {
                             mime: this.state.mime as string,
                         }, doneStr);
                     }
-                    this.setState({isDone: true});
+                    this.setState({ isDone: true });
                 }
                 else {
                     console.log("not done");
@@ -113,30 +113,42 @@ export class Receiver extends React.Component<ReceiverProps, ReceiverState> {
 
     render() {
         return <>
-            { 
-                this.state.isDone 
-                ? <QRCanvas id="nextFrame" input={STOP_CODE} />
-                : this.state.requestedFrame !== null
-                    ? <QRCanvas id="nextFrame" input={this.state.requestedFrame.toString()} />
-                    : null
+            {
+                this.state.isDone
+                    ? <>
+                        <QRCanvas id="nextFrame" input={STOP_CODE} />
+                        <p>done</p>
+                    </>
+                    : <>
+                        {
+                            this.state.requestedFrame !== null
+                                ? <QRCanvas id="nextFrame" input={this.state.requestedFrame.toString()} />
+                                : null
+                        }
+                        <p>{this.state.initiated
+                            ? `${this.state.numFrames} frames, requested: ${this.state.requestedFrame}, mime: ${this.state.mime}`
+                            : null}</p>
+                        <QrScanner
+                            display
+                            onScan={(scanned) => {
+                                if (!this.state.initiated) {
+                                    try {
+                                        const { length, mime } = JSON.parse(scanned) as HeaderPacket;
+                                        this.initiate(length, mime);
+                                    }
+                                    catch (ex) {
+                                        console.warn(ex);
+                                    }
+                                }
+                                else {
+                                    console.log("scanned!");
+                                    console.log(scanned);
+                                    this.logScanned(scanned);
+                                }
+                            }} />
+                    </>
             }
-            <QrScanner
-                onScan={(scanned) => {
-                    if (!this.state.initiated) {
-                        try {
-                            const { length, mime } = JSON.parse(scanned) as HeaderPacket;
-                            this.initiate(length, mime);
-                        }
-                        catch (ex) {
-                            console.warn(ex);
-                        }
-                    }
-                    else {
-                        console.log("scanned!");
-                        console.log(scanned);
-                        this.logScanned(scanned);
-                    }
-                }} />
+
         </>;
     }
 }
