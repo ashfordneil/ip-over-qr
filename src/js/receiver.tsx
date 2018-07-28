@@ -65,11 +65,12 @@ export class Receiver extends React.Component<ReceiverProps, ReceiverState> {
     logScanned(scanned: Scanned) {
         console.log("logging...");
         console.log(scanned);
-        var reg = /^(.*)\|(\d+)$/g;
-        var match = reg.exec(scanned);
-        if (match) {
-            const content = match[1];
-            const frame = parseInt(match[2]);
+        const index = scanned.indexOf('|');
+        const start = scanned.slice(0, index);
+        const end = scanned.slice(index + 1);
+        if (true) {
+            const content = end;
+            const frame = parseInt(start);
             const { requestedFrame } = this.state;
             if (requestedFrame == null) {
                 throw new Error("requested frame is null, dunno how this happened");
