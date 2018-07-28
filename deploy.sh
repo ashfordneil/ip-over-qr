@@ -13,6 +13,7 @@ git checkout -b gh-pages
 
 # perform the build
 # yarn build
+# just run this script after a "yarn watch" instead!!!!
 
 # remove the things we don't want to host
 tar -c CNAME -C dist . > dist.tar
