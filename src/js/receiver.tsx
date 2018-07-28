@@ -2,8 +2,10 @@ import * as React from 'react';
 import { QrScanner } from './scanner';
 import { QRCanvas } from './qrcanvas';
 import { Scanned } from 'instascan';
+import { HeaderPacket, STOP_CODE } from './shared';
 
 interface ReceiverProps {
+    onFinish?: (headers: HeaderPacket, content: string) => void;
 }
 
 // interface ScanEntry {
@@ -17,6 +19,7 @@ interface ReceiverState {
     mime: string | null;
     frames: { [id: number]: string },
     requestedFrame: number | null;
+    isDone: boolean;
 }
 
 export class Receiver extends React.Component<ReceiverProps, ReceiverState> {
@@ -28,11 +31,12 @@ export class Receiver extends React.Component<ReceiverProps, ReceiverState> {
             mime: null,
             frames: [],
             requestedFrame: null,
+            isDone: false,
         };
     }
 
     initiate(numFrames: number, mime: string) {
-        this.setState({ numFrames, initiated: true, mime });
+        this.setState({ numFrames, initiated: true, mime, isDone: false });
         console.log(`intiated: ${numFrames}`);
         this.requestNext();
     }
@@ -66,11 +70,14 @@ export class Receiver extends React.Component<ReceiverProps, ReceiverState> {
         console.log("logging...");
         console.log(scanned);
         const index = scanned.indexOf('|');
-        const start = scanned.slice(0, index);
-        const end = scanned.slice(index + 1);
-        if (true) {
-            const content = end;
-            const frame = parseInt(start);
+        
+        if (index >= 0 ) {
+            const content = scanned.slice(index + 1);
+            const frame = parseInt(scanned.slice(0, index));
+            if (isNaN(frame)) {
+                console.warn(`not a number! ${frame}`);
+                return;
+            }
             const { requestedFrame } = this.state;
             if (requestedFrame == null) {
                 throw new Error("requested frame is null, dunno how this happened");
@@ -87,6 +94,17 @@ export class Receiver extends React.Component<ReceiverProps, ReceiverState> {
                 if (isDone) {
                     console.log("done!");
                     console.log(this.state.frames);
+                    let doneStr = '';
+                    for (let i = 0; i < (this.state.numFrames as number); i++){
+                        doneStr += this.state.frames[i];
+                    }
+                    if (this.props.onFinish) {
+                        this.props.onFinish({
+                            length: this.state.numFrames as number,
+                            mime: this.state.mime as string,
+                        }, doneStr);
+                    }
+                    this.setState({isDone: true});
                 }
                 else {
                     console.log("not done");
@@ -100,8 +118,10 @@ export class Receiver extends React.Component<ReceiverProps, ReceiverState> {
 
     render() {
         return <>
-            {
-                this.state.requestedFrame !== null
+            { 
+                this.state.isDone 
+                ? <QRCanvas id="nextFrame" input={STOP_CODE} />
+                : this.state.requestedFrame !== null
                     ? <QRCanvas id="nextFrame" input={this.state.requestedFrame.toString()} />
                     : null
             }
@@ -112,8 +132,13 @@ export class Receiver extends React.Component<ReceiverProps, ReceiverState> {
                         return;
                     }
                     if (!this.state.initiated) {
-                        const { length, mime } = JSON.parse(scanned.content);
-                        this.initiate(length, mime);
+                        try {
+                            const { length, mime } = JSON.parse(scanned.content) as HeaderPacket;
+                            this.initiate(length, mime);
+                        }
+                        catch (ex) {
+                            console.warn(ex);
+                        }
                     }
                     else {
                         console.log("scanned!");

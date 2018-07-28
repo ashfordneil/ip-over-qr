@@ -38,7 +38,12 @@ export class RecvMenu extends React.Component<Props, State> {
             }
             {
                 this.state.receiving
-                    ? <Receiver />
+                    ? <Receiver onFinish={(headers, content) => {
+                        console.log("headers");
+                        console.log(headers);
+                        console.log("content");
+                        console.log(content);
+                    }}/>
                     : null
             }
         </div>;
