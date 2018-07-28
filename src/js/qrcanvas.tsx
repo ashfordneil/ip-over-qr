@@ -3,7 +3,7 @@ import * as QrCode from 'qrcode';
 
 type QRCanvasProps = {
     id: string;
-    input: {},
+    input: string,
 } & React.DetailedHTMLProps<React.CanvasHTMLAttributes<HTMLCanvasElement>, HTMLCanvasElement>
 
 export class QRCanvas extends React.Component<QRCanvasProps> {
