@@ -6,15 +6,14 @@ import { QrGenerator } from './generator';
 import FileUploader from './fileuploader';
 import { QRCanvas } from './qrcanvas';
 import { FileQRGenerator } from './fileqrgenerator';
-
-
+import '../style.css'
 
 const App = () => {
     const scanner = <QrScanner display={true} />;
     const generator = <QrGenerator display={true} />;
-    return <div>
-        <h1>Hello, world!!!</h1>
-        {scanner}
+    return <div className={"main"}>
+        <h1>QR my sunshine</h1>
+        {/* {scanner} */}
         {generator}
         <FileQRGenerator />
         {/* <FileUploader onUpload={(thing, stuff) => {

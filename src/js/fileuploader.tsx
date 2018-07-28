@@ -17,7 +17,9 @@ class FileUploader extends React.Component<FileUploaderProps, FileUploaderState>
     render() {
         const {onUpload} = this.props;
         return <>
-            <input type="file" onChange={(event) => {
+            <input type="file" 
+                   className="btn btn-default btn-file" 
+              onChange={(event) => {
                 var reader = new FileReader();
                 var files = event.target.files;
                 if (files != null) {

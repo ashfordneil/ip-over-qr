@@ -1,0 +1,4 @@
+[garget.wasm32-unknown-unknown]
+linker = "/usr/bin/ld"
+
+

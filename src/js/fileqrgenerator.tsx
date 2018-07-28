@@ -31,7 +31,7 @@ export class FileQRGenerator extends React.Component<FileQRGeneratorProps, FileQ
     render() {
         return (
             <>
-                <FileUploader onUpload={(thing, stuff) => {
+                <FileUploader className={"btn btn-default btn-file"} onUpload={(thing, stuff) => {
                     // console.log("got thing");
                     // console.log(thing);
                     // console.log(stuff);
