@@ -6,8 +6,14 @@ declare module 'instascan' {
         static getCameras(): CameraThing[]
     }
 
+    export interface ScanData {
+        content: {}
+    }
+
     export class Scanner {
         constructor(props: {});
         start(camera: CameraThing | null): {}
+        stop(): void
+        scan(): ScanData | null
     }
 }

@@ -28,7 +28,7 @@ export class StartupMenu extends React.Component<Props, State> {
     }
 
     render() {
-        const recv = <RecvMenu ready={this.props.recv} />;
+        const recv = <RecvMenu />;
         const send = <SendMenu onComplete={this.props.send} />;
 
         const baseClass = "nav-item nav-link";

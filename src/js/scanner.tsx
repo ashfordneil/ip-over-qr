@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Camera, Scanner } from 'instascan';
+import { Camera, Scanner, ScanData } from 'instascan';
 
 interface Props {
     display?: boolean;
@@ -7,14 +7,14 @@ interface Props {
     autoscan?: boolean;
     scanInterval?: number;
     showAutoToggle?: boolean;
-    onScan: (received: {}) => void;
+    onScan: (received: ScanData | null) => void;
 }
 
 interface State {
     loading: boolean;
     failed: boolean;
     camera: any | null;
-    scanner: any | null;
+    scanner: Scanner | null;
     interval: NodeJS.Timer | null;
 }
 
@@ -55,7 +55,9 @@ export class QrScanner extends React.Component<Props, State> {
 
     componentWillUnmount() {
         this.stopAutoscan();
-        this.state.scanner.stop();
+        if (this.state.scanner) {
+            this.state.scanner.stop();
+        }
     }
 
     startAutoscan() {
@@ -80,9 +82,14 @@ export class QrScanner extends React.Component<Props, State> {
             throw new Error('No camera to scan');
         }
 
-        const output = await this.state.scanner.scan();
-        this.props.onScan(output);
-        return output;
+        if (this.state.scanner) {
+            const output = await this.state.scanner.scan();
+            this.props.onScan(output);
+            return output;
+        }
+        else {
+            throw new Error("No scanner!");
+        }
     }
 
     render() {
