@@ -8,11 +8,6 @@ interface ReceiverProps {
     onFinish?: (headers: HeaderPacket, content: string) => void;
 }
 
-// interface ScanEntry {
-//     frame: number;
-//     content: Scanned;
-// }
-
 interface ReceiverState {
     initiated: boolean;
     numFrames: number | null;
@@ -126,14 +121,10 @@ export class Receiver extends React.Component<ReceiverProps, ReceiverState> {
                     : null
             }
             <QrScanner
-                autoscan
                 onScan={(scanned) => {
-                    if (scanned == null) {
-                        return;
-                    }
                     if (!this.state.initiated) {
                         try {
-                            const { length, mime } = JSON.parse(scanned.content) as HeaderPacket;
+                            const { length, mime } = JSON.parse(scanned) as HeaderPacket;
                             this.initiate(length, mime);
                         }
                         catch (ex) {
@@ -143,7 +134,7 @@ export class Receiver extends React.Component<ReceiverProps, ReceiverState> {
                     else {
                         console.log("scanned!");
                         console.log(scanned);
-                        this.logScanned(scanned.content);
+                        this.logScanned(scanned);
                     }
                 }} />
         </>;

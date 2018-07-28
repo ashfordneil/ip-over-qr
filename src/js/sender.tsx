@@ -34,10 +34,7 @@ export class Sender extends React.Component<Props, State> {
 
         const input = <QrScanner
             display={false}
-            showButton={false}
-            autoscan={true}
-            showAutoToggle={false}
-            onScan={({ content }) => {
+            onScan={content => {
                 if (content === STOP_CODE) {
                     console.log("finished");
                 } else {

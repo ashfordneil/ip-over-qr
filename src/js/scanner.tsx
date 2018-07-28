@@ -1,13 +1,9 @@
 import * as React from 'react';
-import { Camera, Scanner, ScanData } from 'instascan';
+import { Camera, Scanner } from 'instascan';
 
 interface Props {
     display?: boolean;
-    showButton?: boolean;
-    autoscan?: boolean;
-    scanInterval?: number;
-    showAutoToggle?: boolean;
-    onScan: (received: ScanData) => void;
+    onScan: (received: string) => void;
 }
 
 interface State {
@@ -15,7 +11,7 @@ interface State {
     failed: boolean;
     camera: any | null;
     scanner: Scanner | null;
-    interval: NodeJS.Timer | null;
+    scanning: boolean;
 }
 
 export class QrScanner extends React.Component<Props, State> {
@@ -26,13 +22,14 @@ export class QrScanner extends React.Component<Props, State> {
             failed: false,
             camera: null,
             scanner: null,
-            interval: null,
         };
     }
 
     async componentDidMount() {
         const video = document.getElementById('preview');
-        const scanner = new Scanner({ video });
+        const continuous = true;
+        const backgroundScan = false;
+        const scanner = new Scanner({ video, continuous, backgroundScan });
         this.setState({ scanner });
         try {
             const cameras = await Camera.getCameras();
@@ -41,56 +38,19 @@ export class QrScanner extends React.Component<Props, State> {
                 : [null, true];
             this.setState({ camera, failed });
             if (!failed) {
-                await scanner.start(camera);
                 this.setState({ loading: false });
-                if (this.props.autoscan) {
-                    this.startAutoscan();
-                }
-
+                scanner.addListener('scan', c => this.props.onScan(c));
+                await scanner.start(camera);
             }
         } catch (e) {
+            console.warn(e);
             this.setState({ loading: false, failed: true });
         }
     }
 
     componentWillUnmount() {
-        this.stopAutoscan();
         if (this.state.scanner) {
             this.state.scanner.stop();
-        }
-    }
-
-    startAutoscan() {
-        var interval = setInterval(
-            () => {
-                this.scan();
-            }
-            , this.props.scanInterval || 1000);
-        this.setState({ interval });
-    }
-
-    stopAutoscan() {
-        const { interval } = this.state;
-        if (interval) {
-            clearInterval(interval);
-        }
-        this.setState({ interval: null })
-    }
-
-    async scan() {
-        if (this.state.loading || this.state.failed) {
-            throw new Error('No camera to scan');
-        }
-
-        if (this.state.scanner) {
-            const output = await this.state.scanner.scan();
-            if (output !== null) {
-                this.props.onScan(output);
-            }
-            return output;
-        }
-        else {
-            throw new Error("No scanner!");
         }
     }
 
@@ -109,27 +69,6 @@ export class QrScanner extends React.Component<Props, State> {
         return <div>
             {loading}
             {preview}
-            <br />
-            {
-                (!(this.props.showButton) || (loading !== null))
-                    ? null
-                    : <button onClick={() => this.scan()}>Scan</button>
-            }
-            {
-                this.props.showAutoToggle
-                    ? <button onClick={() =>
-                        this.state.interval
-                            ? this.stopAutoscan()
-                            : this.startAutoscan()
-                    }>
-                        {
-                            this.state.interval
-                                ? 'Stop autoscanning'
-                                : 'Start autoscanning'
-                        }
-                    </button>
-                    : null
-            }
         </div>;
     }
 }
