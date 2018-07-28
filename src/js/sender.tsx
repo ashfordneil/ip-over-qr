@@ -3,6 +3,7 @@ import * as React from 'react';
 import { QRCanvas } from './qrcanvas';
 import { QrScanner } from './scanner';
 import { QR_CODE_LENGTH, HeaderPacket, STOP_CODE } from './shared';
+import ProgressBar from './progressbar';
 
 interface Props {
     mime: string;
@@ -57,6 +58,17 @@ export class Sender extends React.Component<Props, State> {
         return <>
             {input}
             {qr}
+            {
+                current !== null
+                    ? <div style={{"width": "100%"}}>
+                        <br />
+                        <ProgressBar
+                            current={current}
+                            total={length}
+                        />
+                    </div>
+                    : null
+            }
         </>;
     }
 }
