@@ -1,10 +1,6 @@
-console.log("Hello, world!");
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 
-const main = async () => {
-    console.log("starting to load wasm");
-    const { foo } = await import("../rust/src/lib.rs");
-    console.log("finished loading wasm");
-    console.log(foo());
-}
+import { App } from './app';
 
-main()
+ReactDOM.render(React.createElement(App), document.getElementById('main'));
