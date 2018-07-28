@@ -3,6 +3,7 @@ import { QrScanner } from './scanner';
 import { QRCanvas } from './qrcanvas';
 import { Scanned } from 'instascan';
 import { HeaderPacket, STOP_CODE } from './shared';
+import ProgressBar from './progressbar';
 
 interface ReceiverProps {
     onFinish?: (headers: HeaderPacket, content: string) => void;
@@ -131,22 +132,10 @@ export class Receiver extends React.Component<ReceiverProps, ReceiverState> {
                         {
                             this.state.initiated && this.state.numFrames !== null ?
                                 <>
-                                    <div className="progress">
-                                        <div
-                                            className="progress-bar progress-bar-striped progress-bar-animated"
-                                            role="progressbar"
-                                            style={{
-                                                "width": (
-                                                    ((this.state.numProcessed + 1) / (this.state.numFrames + 1)) * 100
-                                                ) + "%"
-                                            }}
-                                            aria-valuenow={this.state.numProcessed}
-                                            aria-valuemin={0}
-                                            aria-valuemax={this.state.numFrames}
-                                        >
-                                            {this.state.numProcessed} / {this.state.numFrames}
-                                        </div>
-                                    </div>
+                                    <ProgressBar
+                                        current={this.state.numProcessed}
+                                        total={this.state.numFrames}
+                                    />
                                     <br />
                                 </>
                                 : null
