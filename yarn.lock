@@ -17,6 +17,12 @@
   version "10.5.3"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.5.3.tgz#5bcfaf088ad17894232012877669634c06b20cc5"
 
+"@types/qrcode@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@types/qrcode/-/qrcode-1.2.0.tgz#3ae81b4925e121d5fead96b3edd5ff46ad84f7a5"
+  dependencies:
+    "@types/node" "*"
+
 "@types/react-dom@^16.0.6":
   version "16.0.6"
   resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-16.0.6.tgz#f1a65a4e7be8ed5d123f8b3b9eacc913e35a1a3c"
