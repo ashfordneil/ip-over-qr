@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import { RecvMenu } from './recvMenu';
+import { RecvTab } from './recvTab';
 import { SendMenu } from './sendMenu';
-import { SendThing } from '../sendthing';
+import { SendTab } from './sendTab';
 
 interface Props {
     // send: (data: string, mime: string) => void;
@@ -31,8 +31,8 @@ export class StartupMenu extends React.Component<Props, State> {
     render() {
         const {mode} = this.state;
 
-        const recv = <RecvMenu />;
-        const send = <SendThing />;
+        const recv = <RecvTab />;
+        const send = <SendTab />;
 
         const baseClass = "nav-item nav-link";
         const nav = <div className="nav nav-pills nav-fill">

@@ -10,7 +10,7 @@ interface State {
     inputType: 'null' | 'file' | 'text';
 }
 
-export class SendMenu extends React.Component<Props, State> {
+export class SendUploader extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
@@ -51,7 +51,7 @@ export class SendMenu extends React.Component<Props, State> {
         }
 
         const selectedFile = files[0];
-        reader.onload = (event) => {
+        reader.onload = () => {
             const arrayBuffer = reader.result;
             const array = new Uint8Array(arrayBuffer);
             const binaryString = String.fromCharCode.apply(null, array);

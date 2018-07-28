@@ -1,9 +1,9 @@
 import * as React from 'react';
 
-import { QRCanvas } from './qrcanvas';
-import { QrScanner } from './scanner';
+import { QRCanvas } from './components/qrcanvas';
+import { QrScanner } from './components/scanner';
 import { QR_CODE_LENGTH, HeaderPacket, STOP_CODE } from './shared';
-import ProgressBar from './progressbar';
+import ProgressBar from './components/progressbar';
 
 interface Props {
     mime: string;

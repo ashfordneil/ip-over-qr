@@ -1,8 +1,7 @@
 import * as React from 'react';
 
-import { DuringSend } from './layout/duringSend';
-import { StartupMenu } from './layout/startupMenu';
-import { SendMenu } from './layout/sendMenu';
+import { DuringSend } from './duringSend';
+import { SendMenu } from './sendMenu';
 
 interface SendThingState {
     step: 'upload' | 'sending';
@@ -10,7 +9,7 @@ interface SendThingState {
     mime: string;
 }
 
-export class SendThing extends React.Component<{}, SendThingState> {
+export class SendTab extends React.Component<{}, SendThingState> {
     constructor(props: {}) {
         super(props);
         this.state = {
@@ -29,7 +28,6 @@ export class SendThing extends React.Component<{}, SendThingState> {
                 }}
             />;
         } else if (this.state.step === 'sending') {
-
             return <div>
                 <button className={"btn btn-secondary"}
                     onClick={() => {

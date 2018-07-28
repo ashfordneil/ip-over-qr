@@ -13,7 +13,6 @@ interface State {
 
 export class DuringSend extends React.Component<Props, State> {
     render() {
-        // const body = <QRCanvas id="sending-canvas" input={this.props.data} style={{minWidth: "80%", minHeight: "80%" }} />;
         const body = <Sender mime={this.props.mime} data={this.props.data} />;
 
         return <div style={{

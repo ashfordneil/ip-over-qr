@@ -22,7 +22,7 @@ function download(mimetype: string , text: string) {
   }
   
 
-export class RecvMenu extends React.Component<Props, State> {
+export class RecvTab extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
