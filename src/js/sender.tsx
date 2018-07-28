@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { QRCanvas } from './components/qrcanvas';
-import { QrScanner } from './components/scanner';
+import { QrScanner } from './components/qrscanner';
 import { QR_CODE_LENGTH, HeaderPacket, STOP_CODE } from './shared';
 import ProgressBar from './components/progressbar';
 

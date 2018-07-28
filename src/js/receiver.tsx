@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { QrScanner } from './scanner';
-import { QRCanvas } from './qrcanvas';
+import { QrScanner } from './components/qrscanner';
+import { QRCanvas } from './components/qrcanvas';
 import { Scanned } from 'instascan';
 import { HeaderPacket, STOP_CODE } from './shared';
-import ProgressBar from './progressbar';
+import ProgressBar from './components/progressbar';
 
 interface ReceiverProps {
     onFinish?: (headers: HeaderPacket, content: string) => void;

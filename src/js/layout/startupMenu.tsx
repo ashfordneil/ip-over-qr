@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { RecvTab } from './recvTab';
-import { SendMenu } from './sendMenu';
+import { SendUploader } from './sendUploader';
 import { SendTab } from './sendTab';
 
 interface Props {
