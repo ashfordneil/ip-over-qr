@@ -15,6 +15,7 @@ interface ReceiverState {
     frames: { [id: number]: string },
     requestedFrame: number | null;
     isDone: boolean;
+    numProcessed: number;
 }
 
 export class Receiver extends React.Component<ReceiverProps, ReceiverState> {
@@ -27,11 +28,12 @@ export class Receiver extends React.Component<ReceiverProps, ReceiverState> {
             frames: [],
             requestedFrame: null,
             isDone: false,
+            numProcessed: 0,
         };
     }
 
     initiate(numFrames: number, mime: string) {
-        this.setState({ numFrames, initiated: true, mime, isDone: false });
+        this.setState({ numFrames, initiated: true, mime, isDone: false, numProcessed: 0 });
         console.log(`intiated: ${numFrames}`);
         this.requestNext();
     }
@@ -80,9 +82,10 @@ export class Receiver extends React.Component<ReceiverProps, ReceiverState> {
             console.log(`${frame}, ${requestedFrame}`);
             if (frame == requestedFrame) {
                 console.log("yup");
-                this.setState(({ frames }) => {
+                this.setState(({ frames, numProcessed, }) => {
                     frames[frame] = content;
-                    return ({ frames });
+                    numProcessed++;
+                    return ({ frames, numProcessed });
                 });
                 console.log("setted state");
                 const isDone = this.requestNext() == false;
@@ -125,11 +128,31 @@ export class Receiver extends React.Component<ReceiverProps, ReceiverState> {
                                 ? <QRCanvas id="nextFrame" input={this.state.requestedFrame.toString()} />
                                 : null
                         }
-                        <p>{this.state.initiated
-                            ? `${this.state.numFrames} frames, requested: ${this.state.requestedFrame}, mime: ${this.state.mime}`
-                            : null}</p>
+                        {
+                            this.state.initiated && this.state.numFrames !== null ?
+                                <>
+                                    <div className="progress">
+                                        <div
+                                            className="progress-bar"
+                                            role="progressbar"
+                                            style={{
+                                                "width": (
+                                                    ((this.state.numProcessed + 1) / (this.state.numFrames + 1)) * 100
+                                                ) + "%"
+                                            }}
+                                            aria-valuenow={this.state.numProcessed}
+                                            aria-valuemin={0}
+                                            aria-valuemax={this.state.numFrames}
+                                        >
+                                            {this.state.numProcessed} / {this.state.numFrames}
+                                        </div>
+                                    </div>
+                                    <br />
+                                </>
+                                : null
+                        }
+
                         <QrScanner
-                            display
                             onScan={(scanned) => {
                                 if (!this.state.initiated) {
                                     try {
