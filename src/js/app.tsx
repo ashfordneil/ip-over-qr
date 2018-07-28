@@ -26,21 +26,21 @@ export class App extends React.Component<{}, State> {
                     console.log(data);
                     this.setState({ data, mime, view: 'sending' })
                 }}
-                recv={() => {}}
+                recv={() => { }}
             />;
         } else if (this.state.view === 'sending') {
 
             return <div>
-            <button className={"btn btn-secondary"}
-                    onClick={()=> {
+                <button className={"btn btn-secondary"}
+                    onClick={() => {
                         this.setState({
                             view: 'menu',
                             data: this.state.data,
                             mime: this.state.mime
                         })
-                    }}> Back 
+                    }}> Back
             </button>
-                <DuringSend data={this.state.data} mime={this.state.mime}>
+                <DuringSend data={this.state.data} mime={this.state.mime} />
             </div>
         }
     }
