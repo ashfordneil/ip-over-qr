@@ -14,6 +14,7 @@ interface ReceiverProps {
 interface ReceiverState {
     initiated: boolean;
     numFrames: number | null;
+    mime: string | null;
     frames: { [id: number]: string },
     requestedFrame: number | null;
 }
@@ -24,19 +25,22 @@ export class Receiver extends React.Component<ReceiverProps, ReceiverState> {
         this.state = {
             initiated: false,
             numFrames: null,
+            mime: null,
             frames: [],
             requestedFrame: null,
         };
     }
 
-    initiate(numFrames: number) {
-        this.setState({ numFrames, initiated: true });
+    initiate(numFrames: number, mime: string) {
+        this.setState({ numFrames, initiated: true, mime });
+        console.log(`intiated: ${numFrames}`);
         this.requestNext();
     }
 
     requestNext(): boolean {
         const next = this.nextFrame();
-        if (next) {
+        console.log(`next ${next}`);
+        if (next !== null) {
             this.setState({ requestedFrame: next });
             return true;
         } else {
@@ -50,7 +54,8 @@ export class Receiver extends React.Component<ReceiverProps, ReceiverState> {
             throw new Error("Need num frames");
         }
         for (let i = 0; i < numFrames; i++) {
-            if (!(frames[i])) {
+            console.log(`i ${i}`);
+            if (frames[i] === undefined) {
                 return i;
             }
         }
@@ -58,6 +63,8 @@ export class Receiver extends React.Component<ReceiverProps, ReceiverState> {
     }
 
     logScanned(scanned: Scanned) {
+        console.log("logging...");
+        console.log(scanned);
         var reg = /^(.*)\|(\d+)$/g;
         var match = reg.exec(scanned);
         if (match) {
@@ -67,15 +74,21 @@ export class Receiver extends React.Component<ReceiverProps, ReceiverState> {
             if (requestedFrame == null) {
                 throw new Error("requested frame is null, dunno how this happened");
             }
+            console.log(`${frame}, ${requestedFrame}`);
             if (frame == requestedFrame) {
+                console.log("yup");
                 this.setState(({ frames }) => {
                     frames[frame] = content;
                     return ({ frames });
                 });
-                const isDone = this.requestNext();
+                console.log("setted state");
+                const isDone = this.requestNext() == false;
                 if (isDone) {
                     console.log("done!");
                     console.log(this.state.frames);
+                }
+                else {
+                    console.log("not done");
                 }
             }
         }
@@ -98,8 +111,8 @@ export class Receiver extends React.Component<ReceiverProps, ReceiverState> {
                         return;
                     }
                     if (!this.state.initiated) {
-                        const { numFrames } = JSON.parse(scanned.content);
-                        this.initiate(numFrames);
+                        const { length, mime } = JSON.parse(scanned.content);
+                        this.initiate(length, mime);
                     }
                     else {
                         console.log("scanned!");
