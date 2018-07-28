@@ -55,6 +55,7 @@ export class QrScanner extends React.Component<Props, State> {
 
     componentWillUnmount() {
         this.stopAutoscan();
+        this.state.scanner.stop();
     }
 
     startAutoscan() {
