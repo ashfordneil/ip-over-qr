@@ -8,24 +8,36 @@ import { QRCanvas } from './qrcanvas';
 import { FileQRGenerator } from './fileqrgenerator';
 import '../style.css'
 
-const App = () => {
-    const scanner = <QrScanner display={true} />;
-    const generator = <QrGenerator display={true} />;
-    return <div className={"main"}>
-        <h1>QR my sunshine</h1>
-        {/* {scanner} */}
-        {generator}
-        <FileQRGenerator />
-        {/* <FileUploader onUpload={(thing, stuff) => {
-            console.log("got thing");
-            console.log(thing);
-            console.log(stuff);
-        }}
-        />
-        <QRCanvas id="thingo" input="hello there" />
-        <QRCanvas id="sutfff" input="hiya" />
-        <QRCanvas id="stuff" input="the quick brown fox jumped over the lazy dog" /> */}
-    </div>;
+interface State {
+    showing: 'null' | 'scanner' | 'generator';
 }
+
+class App extends React.Component<{}, State> {
+    constructor(props: {}) {
+        super(props);
+        this.state = {
+            showing: 'null',
+        }
+    }
+
+    render() {
+        const headings = <div>
+            <button onClick={() => this.setState({showing: 'scanner'})}>Scanner</button>
+            <button onClick={() => this.setState({showing: 'generator'})}>Generator</button>
+        </div>;
+
+        const scanner = <QrScanner display={true} />;
+        const generator = <QrGenerator display={true} />;
+
+        const main = { scanner, generator, 'null': null }[this.state.showing];
+        console.log(main, scanner);
+
+        return <div>
+            {headings}
+            {main}
+        </div>
+    }
+}
+
 
 ReactDOM.render(<App />, document.getElementById('main') as HTMLElement);
