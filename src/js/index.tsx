@@ -26,7 +26,14 @@ class App extends React.Component<{}, State> {
             <button onClick={() => this.setState({showing: 'generator'})}>Generator</button>
         </div>;
 
-        const scanner = <QrScanner display={true} />;
+        const scanner = <QrScanner
+            display={true}
+            autoscan
+            showButton
+            onScan={scanned => {
+                console.log("did the scan!");
+                console.log(scanned);
+            }} />;
         const generator = <QrGenerator display={true} />;
 
         const main = { scanner, generator, 'null': null }[this.state.showing];

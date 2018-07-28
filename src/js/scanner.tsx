@@ -2,7 +2,11 @@ import * as React from 'react';
 import { Camera, Scanner } from 'instascan';
 
 interface Props {
-    display: boolean;
+    display?: boolean;
+    showButton?: boolean;
+    autoscan?: boolean;
+    scanInterval?: number;
+    onScan: (received: {}) => void;
 }
 
 interface State {
@@ -10,6 +14,7 @@ interface State {
     failed: boolean;
     camera: any | null;
     scanner: any | null;
+    interval?: NodeJS.Timer;
 }
 
 export class QrScanner extends React.Component<Props, State> {
@@ -29,16 +34,32 @@ export class QrScanner extends React.Component<Props, State> {
         this.setState({ scanner });
         try {
             const cameras = await Camera.getCameras();
-            const [ camera, failed ] = cameras.length > 0
-                ? [ cameras[0], false ]
-                : [ null, true ];
+            const [camera, failed] = cameras.length > 0
+                ? [cameras[0], false]
+                : [null, true];
             this.setState({ camera, failed });
             if (!failed) {
                 await scanner.start(camera);
                 this.setState({ loading: false });
+                if (this.props.autoscan) {
+                    var interval = setInterval(
+                        () => {
+                            this.scan();
+                        }
+                        , this.props.scanInterval || 1000);
+                    this.setState({ interval });
+                }
+
             }
         } catch (e) {
             this.setState({ loading: false, failed: true });
+        }
+    }
+
+    componentWillUnmount() {
+        const { interval } = this.state;
+        if (interval) {
+            clearInterval(interval);
         }
     }
 
@@ -48,13 +69,13 @@ export class QrScanner extends React.Component<Props, State> {
         }
 
         const output = await this.state.scanner.scan();
-        console.log(output);
+        this.props.onScan(output);
         return output;
     }
 
     render() {
         const loading = this.state.loading
-            ?  <div>Loading...</div>
+            ? <div>Loading...</div>
             : this.state.failed
                 ? <div>No camera, no app</div>
                 : null;
@@ -63,15 +84,16 @@ export class QrScanner extends React.Component<Props, State> {
             ? <video id='preview' />
             : null;
 
-        const button = loading !== null
-            ? null
-            : <button onClick={() => this.scan()}>Hi</button>;
 
         return <div>
             {loading}
             {preview}
             <br />
-            {button}
+            {
+                (!(this.props.showButton) || (loading !== null))
+                    ? null
+                    : <button onClick={() => this.scan()}>Scan</button>
+            }
         </div>;
     }
 }
