@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { Sender } from '../sender';
+import { HeaderPacket } from '../shared';
 
 interface Props {
     data: string;

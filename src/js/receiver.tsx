@@ -120,13 +120,13 @@ export class Receiver extends React.Component<ReceiverProps, ReceiverState> {
             {
                 this.state.isDone
                     ? <>
-                        <QRCanvas id="nextFrame" input={STOP_CODE} />
+                        <QRCanvas input={STOP_CODE} />
                         <p>done</p>
                     </>
                     : <>
                         {
                             this.state.requestedFrame !== null
-                                ? <QRCanvas id="nextFrame" input={this.state.requestedFrame.toString()} />
+                                ? <QRCanvas input={this.state.requestedFrame.toString()} />
                                 : null
                         }
                         {

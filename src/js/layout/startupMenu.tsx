@@ -2,10 +2,11 @@ import * as React from 'react';
 
 import { RecvMenu } from './recvMenu';
 import { SendMenu } from './sendMenu';
+import { SendThing } from '../sendthing';
 
 interface Props {
-    send: (data: string, mime: string) => void;
-    recv: () => void;
+    // send: (data: string, mime: string) => void;
+    // recv: () => void;
 }
 
 interface State {
@@ -21,31 +22,33 @@ export class StartupMenu extends React.Component<Props, State> {
     }
 
     selectNav(input: 'send' | 'recv') {
-        return (event) => {
+        return ((event) => {
             event.preventDefault();
             this.setState({ mode: input });
-        }
+        }) as React.MouseEventHandler<{}>
     }
 
     render() {
+        const {mode} = this.state;
+
         const recv = <RecvMenu />;
-        const send = <SendMenu onComplete={this.props.send} />;
+        const send = <SendThing />;
 
         const baseClass = "nav-item nav-link";
         const nav = <div className="nav nav-pills nav-fill">
             <a
-                className={baseClass + (this.state.mode === 'send' ? ' active' : '')}
+                className={baseClass + (mode === 'send' ? ' active' : '')}
                 href="#"
                 onClick={this.selectNav('send')}
             >Send</a>
             <a
-                className={baseClass + (this.state.mode === 'recv' ? ' active' : '')}
+                className={baseClass + (mode === 'recv' ? ' active' : '')}
                 href="#"
                 onClick={this.selectNav('recv')}
             >Recv</a>
         </div>;
 
-        const body = { recv, send }[this.state.mode];
+        const body = { recv, send }[mode];
 
         return <div style={{height: "100%", display: "flex", flexFlow: "column"}}>
             {nav}

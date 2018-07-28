@@ -32,7 +32,7 @@ export class QrGenerator extends React.Component<Props, State> {
                     className={"form-control"}/>
                 </label>
             </div>
-            <QrCanv.QRCanvas id="test" input={this.state.input}/>
+            <QrCanv.QRCanvas input={this.state.input}/>
             </div>
     )
     }

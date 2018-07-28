@@ -20,7 +20,10 @@ export class SendMenu extends React.Component<Props, State> {
         };
     }
 
-    onTextChange(event) {
+    onTextChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
+        if (event.target == null) {
+            return;
+        }
         const input = event.target.value;
         if (input) {
             this.setState({
@@ -37,7 +40,10 @@ export class SendMenu extends React.Component<Props, State> {
         }
     }
 
-    onFileChange(event) {
+    onFileChange(event: React.ChangeEvent<HTMLInputElement>) {
+        if (event.target == null) {
+            return;
+        }
         const reader = new FileReader();
         const files = event.target.files;
         if (files === null) {

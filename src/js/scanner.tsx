@@ -11,7 +11,6 @@ interface State {
     failed: boolean;
     camera: any | null;
     scanner: Scanner | null;
-    scanning: boolean;
 }
 
 export class QrScanner extends React.Component<Props, State> {

@@ -36,7 +36,7 @@ export class Sender extends React.Component<Props, State> {
             ? JSON.stringify({ mime, length } as HeaderPacket)
             : `${current}|${data.slice(current * QR_CODE_LENGTH, (current + 1) * QR_CODE_LENGTH)}`;
 
-        const qr = <QRCanvas id='transmitter' input={payload} />;
+        const qr = <QRCanvas input={payload} />;
 
         const input = <QrScanner
             display={false}

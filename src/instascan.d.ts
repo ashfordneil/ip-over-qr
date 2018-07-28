@@ -1,3 +1,4 @@
+
 declare module 'instascan' {
     export interface CameraThing {
     }
@@ -13,9 +14,10 @@ declare module 'instascan' {
     }
 
     export class Scanner {
-        constructor(props: {});
+        constructor(props: {})
         start(camera: CameraThing | null): {}
         stop(): void
         scan(): ScanData | null
+        addListener(event: string, callback: (thing: Scanned) => void): void
     }
 }
