@@ -7,6 +7,12 @@ import { Scanned } from 'instascan';
 interface ReceiverProps {
 }
 
+interface ScanEntry {
+    frame: number;
+    content: Scanned;
+    checksum: string;
+}
+
 interface ReceiverState {
     scanHist: Scanned[],
     checksum: string | null;
@@ -22,12 +28,22 @@ export class Receiver extends React.Component<ReceiverProps, ReceiverState> {
     }
 
     logScanned(scanned: Scanned) {
-        const { scanHist, checksum } = this.state;
-        const newChecksum = getChecksum(scanned, scanHist.length);
-        if (checksum != newChecksum) {
-            scanHist.push(scanned);
-            this.setState({ scanHist, checksum: newChecksum });
+        var reg = /^(.*)\|(\d+)$/g;
+        var match = reg.exec(scanned);
+        if (match) {
+            const content = match[1];
+            const frame = parseInt(match[2]);
+            console.log(`frame ${frame}`);
         }
+        else {
+            console.warn("Does not match format!");
+        }
+        // const { scanHist, checksum } = this.state;
+        // const newChecksum = getChecksum(scanned);
+        // if (checksum != newChecksum) {
+        //     scanHist.push(scanned);
+        //     this.setState({ scanHist, checksum: newChecksum });
+        // }
     }
 
     render() {
