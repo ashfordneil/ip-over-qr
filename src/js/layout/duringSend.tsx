@@ -8,35 +8,28 @@ interface Props {
     mime: string;
 }
 
-interface State {
-}
-
-export class DuringSend extends React.Component<Props, State> {
-    render() {
-        const body = <Sender mime={this.props.mime} data={this.props.data} />;
-
-        return <div style={{
+export const DuringSend = (props: Props) =>
+    <div
+        style={{
             width: "100%",
             display: "flex",
             flexFlow: "column",
+        }}
+    >
+        <div className="nav nav-pills nav-fill">
+            <div className="nav-item nav-link active">Sending</div>
+        </div>
+        <div
+            className="jumbotron"
+            style={{
+                flex: 1,
+                display: "flex",
+                flexFlow: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "100%",
             }}
         >
-            <div className="nav nav-pills nav-fill">
-                <div className="nav-item nav-link active">Sending</div>
-            </div>
-            <div
-                className="jumbotron"
-                style={{
-                    flex: 1,
-                    display: "flex",
-                    flexFlow: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    width: "100%",
-                }}
-            >
-                {body}
-            </div>
-        </div>;
-    }
-}
+            <Sender mime={props.mime} data={props.data} />
+        </div>
+    </div>
