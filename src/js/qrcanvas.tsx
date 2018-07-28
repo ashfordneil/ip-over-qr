@@ -1,14 +1,22 @@
 import * as React from 'react';
 import * as QrCode from 'qrcode';
 
-type Props = {
-    id: string;
-    input: string,
+interface Props {
+    input: string;
 }
 
-export class QRCanvas extends React.Component<Props> {
+interface State {
+    url: string | null;
+    oldInput: string | null;
+}
+
+export class QRCanvas extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
+        this.state = {
+            url: null,
+            oldInput: null,
+        };
     }
 
     componentDidMount() {
@@ -20,25 +28,27 @@ export class QRCanvas extends React.Component<Props> {
     }
 
     generate() {
-        const { id, input } = this.props;
-        var canv = document.getElementById(id) as HTMLCanvasElement;
-        QrCode.toCanvas(canv, input, (err: any) => {
-            if (err) {
-                console.warn("Error creating QR");
-                console.warn(err);
-                const context = canv.getContext('2d');
-                if (context) {
-                    context.clearRect(0, 0, canv.width, canv.height);
+        const { input } = this.props;
+        const { oldInput } = this.state;
+        if (input !== oldInput) {
+            QrCode.toDataURL(input, (err: any, url: string) => {
+                if (err) {
+                    console.warn("Error creating QR");
+                    console.warn(err);
                 }
-            }
+
+                this.setState({ url, oldInput: input });
+            });
         }
-        );
     }
 
     render() {
-        const { input, id } = this.props;
-        return <div style={{ width: "100%", height: "100%" }}>
-            <canvas id={id} style={{ minWidth: "80%", minHeight: "80%" }} />
+        const { input } = this.props;
+        return <div style={{ flex: 1, display: "flex", flexFlow: "column", width: "100%", maxWidth: "80vh" }}>
+            <img src={this.state.url} alt="Loading QR Code" style={{
+                flex: 1,
+                objectFit: "contain",
+            }}/>
         </div>;
     }
 }

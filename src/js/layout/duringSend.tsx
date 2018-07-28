@@ -15,11 +15,26 @@ export class DuringSend extends React.Component<Props, State> {
         // const body = <QRCanvas id="sending-canvas" input={this.props.data} style={{minWidth: "80%", minHeight: "80%" }} />;
         const body = <Sender mime={this.props.mime} data={this.props.data} />;
 
-        return <div style={{height: "100%", display: "flex", flexFlow: "column"}}>
+        return <div style={{
+            width: "100%",
+            display: "flex",
+            flexFlow: "column",
+            }}
+        >
             <div className="nav nav-pills nav-fill">
                 <div className="nav-item nav-link active">Sending</div>
             </div>
-            <div className="jumbotron" style={{ flex: 1, display: "flex", flexFlow: "column", alignItems: "center" justifyContent: "center" }}>
+            <div
+                className="jumbotron"
+                style={{
+                    flex: 1,
+                    display: "flex",
+                    flexFlow: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: "100%",
+                }}
+            >
                 {body}
             </div>
         </div>;
