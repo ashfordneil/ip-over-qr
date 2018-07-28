@@ -26,3 +26,5 @@ rm dist.tar
 git add .
 git commit -m "deploy"
 git push -u origin gh-pages --force
+
+git checkout master
