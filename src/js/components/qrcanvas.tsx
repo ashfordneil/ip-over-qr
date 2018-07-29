@@ -44,7 +44,7 @@ export class QRCanvas extends React.Component<Props, State> {
 
     render() {
         const { input } = this.props;
-        return <div style={{ flex: 1, display: "flex", flexFlow: "column", width: "100%", maxWidth: "80vh" }}>
+        return <div style={{ flex: 1, display: "flex", flexFlow: "column", width: "100%", maxWidth: "calc(100vh - 16em)" }}>
             <img src={this.state.url || undefined} alt="Loading QR Code" style={{
                 flex: 1,
                 objectFit: "contain",
