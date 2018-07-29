@@ -55,9 +55,9 @@ export class QrScanner extends React.Component<Props, State> {
 
     render() {
         const loading = this.state.loading
-            ? <div>Loading...</div>
+            ? null
             : this.state.failed
-                ? <div>No camera, no app</div>
+                ? <div className="alert alert-danger">No camera, no app</div>
                 : null;
 
         const preview = this.props.display
