@@ -1,8 +1,6 @@
 import * as React from "react";
 import { Receiver } from "../receiver";
 
-import { decompress } from "lz-string";
-
 interface Props {
 }
 
@@ -42,7 +40,7 @@ export class RecvTab extends React.Component<Props, State> {
         const main = this.state.step === 'going' || this.state.step === 'finished'
             ? <Receiver
                 onFinish={(headers, content) => {
-                    download(decompress(content));
+                    download(content);
                     this.setState({ step: 'finished' });
                 }}
                 onCancel={() => this.setState({ step: 'cancelled' })}

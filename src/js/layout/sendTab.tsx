@@ -2,7 +2,6 @@ import * as React from 'react';
 
 import { SendUploader } from './sendUploader';
 import { Sender } from '../sender';
-import { compress } from "lz-string";
 
 interface SendThingState {
     step: 'upload' | 'sending' | 'sent' | 'cancelled';
@@ -24,7 +23,8 @@ export class SendTab extends React.Component<{}, SendThingState> {
         if (this.state.step === 'upload') {
             return <SendUploader
                 onComplete={(data, mime) => {
-                    this.setState({ data: compress(data), mime, step: 'sending' })
+                    console.log(data);
+                    this.setState({ data, mime, step: 'sending' })
                 }}
             />;
         } else if (this.state.step === 'sending') {
