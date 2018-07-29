@@ -8,12 +8,12 @@ interface State {
     receiving: boolean;
 }
 
-function download(mimetype: string , text: string) {
-    var element = document.createElement('a');
-    element.setAttribute('href', 'data:' + mimetype + ';charset=utf-8,' + encodeURIComponent(text));
-    element.setAttribute('download', 'thingo');
+function download(dataUrl: string) {
+    const element = document.createElement('a');
+    element.href = dataUrl;
   
     element.style.display = 'none';
+    element.setAttribute('download', 'download');
     document.body.appendChild(element);
   
     element.click();
@@ -47,7 +47,7 @@ export class RecvTab extends React.Component<Props, State> {
                         console.log(headers);
                         console.log("content");
                         console.log(content);
-                        download(headers.mime, content);
+                        download(content);
                     }}/>
                     : null
             }
