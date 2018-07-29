@@ -45,7 +45,7 @@ export class StartupMenu extends React.Component<Props, State> {
                 className={baseClass + (mode === 'recv' ? ' active' : '')}
                 href="#"
                 onClick={this.selectNav('recv')}
-            >Recv</a>
+            >Receive</a>
         </div>;
 
         const body = { recv, send }[mode];
