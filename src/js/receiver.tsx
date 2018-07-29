@@ -6,7 +6,8 @@ import { HeaderPacket, STOP_CODE } from './shared';
 import ProgressBar from './components/progressbar';
 
 interface ReceiverProps {
-    onFinish?: (headers: HeaderPacket, content: string) => void;
+    onFinish: (headers: HeaderPacket, content: string) => void;
+    onCancel: () => void,
 }
 
 interface ReceiverState {
@@ -35,13 +36,11 @@ export class Receiver extends React.Component<ReceiverProps, ReceiverState> {
 
     initiate(numFrames: number, mime: string) {
         this.setState({ numFrames, initiated: true, mime, isDone: false, numProcessed: 0 });
-        console.log(`intiated: ${numFrames}`);
         this.requestNext();
     }
 
     requestNext(): boolean {
         const next = this.nextFrame();
-        console.log(`next ${next}`);
         if (next !== null) {
             this.setState({ requestedFrame: next });
             return true;
@@ -56,7 +55,6 @@ export class Receiver extends React.Component<ReceiverProps, ReceiverState> {
             throw new Error("Need num frames");
         }
         for (let i = 0; i < numFrames; i++) {
-            console.log(`i ${i}`);
             if (frames[i] === undefined) {
                 return i;
             }
@@ -65,8 +63,6 @@ export class Receiver extends React.Component<ReceiverProps, ReceiverState> {
     }
 
     logScanned(scanned: Scanned) {
-        console.log("logging...");
-        console.log(scanned);
         const index = scanned.indexOf('|');
 
         if (index >= 0) {
@@ -80,37 +76,26 @@ export class Receiver extends React.Component<ReceiverProps, ReceiverState> {
             if (requestedFrame == null) {
                 throw new Error("requested frame is null, dunno how this happened");
             }
-            console.log(`${frame}, ${requestedFrame}`);
             if (frame == requestedFrame) {
-                console.log("yup");
                 this.setState(({ frames, numProcessed, }) => {
                     frames[frame] = content;
                     numProcessed++;
                     return ({ frames, numProcessed });
                 });
-                console.log("setted state");
                 const isDone = this.requestNext() == false;
                 if (isDone) {
-                    console.log("done!");
-                    console.log(this.state.frames);
                     let doneStr = '';
                     for (let i = 0; i < (this.state.numFrames as number); i++) {
                         doneStr += this.state.frames[i];
                     }
-                    if (this.props.onFinish) {
-                        this.props.onFinish({
-                            length: this.state.numFrames as number,
-                            mime: this.state.mime as string,
-                        }, doneStr);
-                    }
+                    this.props.onFinish({
+                        length: this.state.numFrames as number,
+                        mime: this.state.mime as string,
+                    }, doneStr);
                     this.setState({ isDone: true });
                 }
-                else {
-                    console.log("not done");
-                }
             }
-        }
-        else {
+        } else {
             console.warn("Does not match format!");
         }
     }
@@ -124,7 +109,19 @@ export class Receiver extends React.Component<ReceiverProps, ReceiverState> {
                 this.state.isDone
                     ? <>
                         <QRCanvas input={STOP_CODE} />
-                        <p>done</p>
+                        <button
+                            className="btn btn-primary"
+                            onClick={() => this.setState({
+                                initiated: false ,
+                                numFrames: null,
+                                mime: null,
+                                frames: [],
+                                requestedFrame: null,
+                                isDone: false,
+                                numProcessed: 0,
+                            })}
+                            style={{ width: "100%" }}
+                        >Go</button>
                     </>
                     : <>
                         {
@@ -136,20 +133,37 @@ export class Receiver extends React.Component<ReceiverProps, ReceiverState> {
                             current={progress.current}
                             total={progress.total}
                         />
+                        <div style={{ display: "flex", width: "100%" }}>
+                            <button
+                                className="btn btn-secondary"
+                                onClick={() => this.setState({
+                                    initiated: false ,
+                                    numFrames: null,
+                                    mime: null,
+                                    frames: [],
+                                    requestedFrame: null,
+                                    isDone: false,
+                                    numProcessed: 0,
+                                })}
+                                style={{ flex: 1 }}
+                            >Restart</button>
+                            <button
+                                className="btn btn-warning"
+                                onClick={() => this.props.onCancel()}
+                                style={{ flex: 1 }}
+                            >Cancel</button>
+                        </div>
                         <QrScanner
                             onScan={(scanned) => {
                                 if (!this.state.initiated) {
                                     try {
                                         const { length, mime } = JSON.parse(scanned) as HeaderPacket;
                                         this.initiate(length, mime);
-                                    }
-                                    catch (ex) {
+                                    } catch (ex) {
                                         console.warn(ex);
                                     }
                                 }
                                 else {
-                                    console.log("scanned!");
-                                    console.log(scanned);
                                     this.logScanned(scanned);
                                 }
                             }} />

@@ -5,13 +5,12 @@ interface Props {
 }
 
 interface State {
-    receiving: boolean;
+    step: 'waiting' | 'going' | 'finished' | 'cancelled'
 }
 
 function download(dataUrl: string) {
     const element = document.createElement('a');
     element.href = dataUrl;
-  
     element.style.display = 'none';
     element.setAttribute('download', 'download');
     document.body.appendChild(element);
@@ -26,39 +25,36 @@ export class RecvTab extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            receiving: false
+            step: 'waiting'
         }
     }
 
-    startReceiving() {
-        this.setState({ receiving: true });
-    }
-
-    stopReceiving() {
-        this.setState({ receiving: false });
-    }
-
     render() {
-        return <div className="jumbotron" style={{ flex: 1 }}>
-            {
-                this.state.receiving
-                    ? <Receiver onFinish={(headers, content) => {
-                        console.log("headers");
-                        console.log(headers);
-                        console.log("content");
-                        console.log(content);
-                        download(content);
-                    }}/>
-                    : null
-            }
-                        {
-                <button
-                    className="btn btn-primary"
-                    onClick={() => { this.state.receiving ? this.stopReceiving() : this.startReceiving()}}
-                    style={{ width: "100%" }}
-                >{this.state.receiving ? "Stop" : "Go"}</button>
+        const alert = {
+            waiting: null,
+            going: null,
+            finished: <div className="alert alert-success">Finished</div>,
+            cancelled: <div className="alert alert-warning">Cancelled</div>,
+        }[this.state.step];
 
-            }
+        const main = this.state.step === 'going' || this.state.step === 'finished'
+            ? <Receiver
+                onFinish={(headers, content) => {
+                    download(content);
+                    this.setState({ step: 'finished' });
+                }}
+                onCancel={() => this.setState({ step: 'cancelled' })}
+            />
+            : <button
+                className="btn btn-primary"
+                onClick={() => { this.setState({ step: 'going' }) }}
+                style={{ width: "100%" }}
+            >Go</button>;
+
+        return <div className="jumbotron" style={{ flex: 1, display: "flex", flexAlign: "center", flexFlow: "column" }}>
+            {alert}
+            <div style={{ flex: 1 }} />
+            {main}
         </div>;
     }
 }
