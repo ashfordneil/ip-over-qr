@@ -53,8 +53,7 @@ export class SendUploader extends React.Component<Props, State> {
         const selectedFile = files[0];
         reader.onload = () => {
             const arrayBuffer = reader.result;
-            const array = new Uint8Array(arrayBuffer);
-            const binaryString = String.fromCharCode.apply(null, array);
+            var binaryString = arrayBuffer;
             this.setState({
                 data: binaryString,
                 mime: selectedFile.type,
@@ -62,7 +61,7 @@ export class SendUploader extends React.Component<Props, State> {
             });
         }
 
-        reader.readAsArrayBuffer(selectedFile);
+        reader.readAsDataURL(selectedFile);
     }
 
     render() {
