@@ -6,6 +6,7 @@ interface Props {
 
 interface State {
     data: string;
+    dataUrl: string;
     mime: string;
     inputType: 'null' | 'file' | 'text';
 }
@@ -15,6 +16,7 @@ export class SendUploader extends React.Component<Props, State> {
         super(props);
         this.state = {
             data: '',
+            dataUrl: '',
             mime: '',
             inputType: 'null',
         };
@@ -26,8 +28,10 @@ export class SendUploader extends React.Component<Props, State> {
         }
         const input = event.target.value;
         if (input) {
+            const dataUrl = `data:text/plain;base64,${btoa(input)}`;
             this.setState({
                 data: input,
+                dataUrl,
                 mime: 'text/plain',
                 inputType: 'text',
             });
@@ -52,10 +56,10 @@ export class SendUploader extends React.Component<Props, State> {
 
         const selectedFile = files[0];
         reader.onload = () => {
-            const arrayBuffer = reader.result;
-            var binaryString = arrayBuffer;
+            const dataUrl = reader.result;
             this.setState({
-                data: binaryString,
+                data: '',
+                dataUrl,
                 mime: selectedFile.type,
                 inputType: 'file',
             });
@@ -88,7 +92,7 @@ export class SendUploader extends React.Component<Props, State> {
         const go = <button
             className="btn btn-primary"
             disabled={this.state.inputType === 'null'}
-            onClick={() => this.props.onComplete(this.state.data, this.state.mime)}
+            onClick={() => this.props.onComplete(this.state.dataUrl, this.state.mime)}
             style={{ flex: 1 }}
         >Go</button>;
 
