@@ -97,18 +97,18 @@ export class SendUploader extends React.Component<Props, State> {
         >Go</button>;
 
         const cancel = <button
-            className="btn btn-warning"
+            className="btn btn-secondary"
             disabled={this.state.inputType === 'null'}
             onClick={() => this.setState({ data: '', mime: '', inputType: 'null' })}
             style={{ flex: 1 }}
-        >Cancel</button>;
+        >Clear</button>;
 
         return <div className="jumbotron" style={{display: "flex", flexFlow: "column", flex: 1}}>
             {textIn}
             {fileIn}
             <div style={{ display: "flex" }}>
-                {go}
                 {cancel}
+                {go}
             </div>
         </div>;
     }

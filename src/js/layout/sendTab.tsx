@@ -4,7 +4,7 @@ import { SendUploader } from './sendUploader';
 import { Sender } from '../sender';
 
 interface SendThingState {
-    step: 'upload' | 'sending';
+    step: 'upload' | 'sending' | 'sent' | 'cancelled';
     data: string;
     mime: string;
 }
@@ -28,41 +28,58 @@ export class SendTab extends React.Component<{}, SendThingState> {
                 }}
             />;
         } else if (this.state.step === 'sending') {
-            return <div>
-                <button className={"btn btn-secondary"}
-                    onClick={() => {
-                        this.setState({
-                            step: 'upload',
-                            data: this.state.data,
-                            mime: this.state.mime
-                        })
-                    }}> Back
-            </button>
-                <div
+            return <div
+                    className="jumbotron"
                     style={{
-                        width: "100%",
+                        flex: 1,
                         display: "flex",
                         flexFlow: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        width: "100%",
                     }}
                 >
-                    <div className="nav nav-pills nav-fill">
-                        <div className="nav-item nav-link active">Sending</div>
-                    </div>
-                    <div
-                        className="jumbotron"
-                        style={{
-                            flex: 1,
-                            display: "flex",
-                            flexFlow: "column",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            width: "100%",
-                        }}
-                    >
-                        <Sender mime={this.state.mime} data={this.state.data} />
+                    <Sender
+                        mime={this.state.mime}
+                        data={this.state.data}
+                        onFinish={() => this.setState({step: 'sent' })}
+                        onCancel={() => this.setState({step: 'cancelled' })}
+                    />
+                </div>
+        } else if (this.state.step === 'sent' || this.state.step === 'cancelled') {
+            const alert = this.state.step === 'sent'
+                ? <div className="alert alert-success">
+                    Finished
+                </div>
+                : <div className="alert alert-warning">
+                    Cancelled
+                </div>;
+            return <div
+                    className="jumbotron"
+                    style={{
+                        flex: 1,
+                        display: "flex",
+                        flexFlow: "column",
+                        alignItems: "stretch",
+                        justifyContent: "center",
+                        width: "100%",
+                    }}
+                >
+                    {alert}
+                    <div style={{ flex: 1 }} />
+                    <div style={{ display: "flex", width: "100%" }}>
+                        <button
+                            className="btn btn-secondary"
+                            onClick={() => {this.setState({step: 'sending' })}}
+                            style={{ flex: 1 }}
+                        >Send Again</button>
+                        <button
+                            className="btn btn-primary"
+                            onClick={() => {this.setState({step: 'upload' })}}
+                            style={{ flex: 1 }}
+                        >New File</button>
                     </div>
                 </div>
-            </div>
         }
     }
 }

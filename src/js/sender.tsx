@@ -8,11 +8,12 @@ import ProgressBar from './components/progressbar';
 interface Props {
     mime: string;
     data: string;
+    onFinish: () => void;
+    onCancel: () => void;
 }
 
 interface State {
     current: null | number;
-    finished: boolean;
 }
 
 export class Sender extends React.Component<Props, State> {
@@ -20,16 +21,12 @@ export class Sender extends React.Component<Props, State> {
         super(props);
         this.state = {
             current: null,
-            finished: false,
         };
     }
 
     render() {
-        const { current, finished } = this.state;
+        const { current } = this.state;
         const { mime, data } = this.props;
-        if (finished) {
-            return <div>Done!</div>;
-        }
 
         const length = Math.ceil(data.length / QR_CODE_LENGTH);
         const payload = (current === null)
@@ -42,8 +39,7 @@ export class Sender extends React.Component<Props, State> {
             display={false}
             onScan={content => {
                 if (content === STOP_CODE) {
-                    console.log("finished");
-                    this.setState({finished: true});
+                    this.props.onFinish();
                 } else {
                     try {
                         const num = parseInt(content);
@@ -64,17 +60,23 @@ export class Sender extends React.Component<Props, State> {
         return <>
             {input}
             {qr}
-            {
-                current !== null
-                    ? <div style={{"width": "100%"}}>
-                        <br />
-                        <ProgressBar
-                            current={current}
-                            total={length}
-                        />
-                    </div>
-                    : null
-            }
+            <ProgressBar
+                current={current || 0}
+                total={length}
+            />
+            <br />
+            <div style={{ display: "flex", width: "100%" }}>
+                <button
+                    className="btn btn-secondary"
+                    onClick={() => {this.setState({ current: null })}}
+                    style={{ flex: 1}}
+                >Restart</button>
+                <button
+                    className="btn btn-warning"
+                    onClick={() => {this.props.onCancel()}}
+                    style={{ flex: 1}}
+                >Stop</button>
+            </div>
         </>;
     }
 }

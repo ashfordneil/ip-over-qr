@@ -6,13 +6,13 @@ interface ProgressBarProps {
 }
 
 const ProgressBar = ({ current, total }: ProgressBarProps) =>
-    <div className="progress">
+    <div className="progress" style={{ width: "100%" }}>
         <div
             className="progress-bar progress-bar-striped progress-bar-animated"
             role="progressbar"
             style={{
                 "width": (
-                    ((current + 1) / (total + 1)) * 100
+                    (current / total) * 100
                 ) + "%"
             }}
             aria-valuenow={current}

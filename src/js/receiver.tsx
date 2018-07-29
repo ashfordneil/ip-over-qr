@@ -116,6 +116,9 @@ export class Receiver extends React.Component<ReceiverProps, ReceiverState> {
     }
 
     render() {
+        const progress = this.state.initiated && this.state.numFrames !== null
+            ? { current: this.state.numProcessed, total: this.state.numFrames }
+            : { current: 0, total: 1 };
         return <>
             {
                 this.state.isDone
@@ -129,18 +132,10 @@ export class Receiver extends React.Component<ReceiverProps, ReceiverState> {
                                 ? <QRCanvas input={this.state.requestedFrame.toString()} />
                                 : null
                         }
-                        {
-                            this.state.initiated && this.state.numFrames !== null ?
-                                <>
-                                    <ProgressBar
-                                        current={this.state.numProcessed}
-                                        total={this.state.numFrames}
-                                    />
-                                    <br />
-                                </>
-                                : null
-                        }
-
+                        <ProgressBar
+                            current={progress.current}
+                            total={progress.total}
+                        />
                         <QrScanner
                             onScan={(scanned) => {
                                 if (!this.state.initiated) {
