@@ -33,8 +33,8 @@ export class RecvTab extends React.Component<Props, State> {
         const alert = {
             waiting: null,
             going: null,
-            finished: <div className="alert alert-success">Finished</div>,
-            cancelled: <div className="alert alert-warning">Cancelled</div>,
+            finished: <div style={{ width: "100%" }} className="alert alert-success">Finished</div>,
+            cancelled: <div style={{ width: "100%" }} className="alert alert-warning">Cancelled</div>,
         }[this.state.step];
 
         const main = this.state.step === 'going' || this.state.step === 'finished'
@@ -51,7 +51,7 @@ export class RecvTab extends React.Component<Props, State> {
                 style={{ width: "100%" }}
             >Go</button>;
 
-        return <div className="jumbotron" style={{ flex: 1, display: "flex", flexAlign: "center", flexFlow: "column" }}>
+        return <div className="jumbotron" style={{ flex: 1, display: "flex", alignItems: "center", flexFlow: "column" }}>
             {alert}
             <div style={{ flex: 1 }} />
             {main}
